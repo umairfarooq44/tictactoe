@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>tic tac toe</title>
+</head>
+<body  ng-app='app' ng-controller='AppCtrl'>
+
+<table>
+    <tr>
+        <td style="border:solid">
+            <input type = "radio" value="2" name="11" ng-model="value" ng-click = "sendVal(2,0,0)"  ng-disabled ="{{value[0][0]!=0}}" ng-checked = "{{value[0][0]== 2}} " />2
+            <input type = "radio" value="1"  name="11"  ng-model="value" ng-click = "sendVal(1,0,0)" ng-disabled ="{{value[0][0]!=0}}" ng-checked = "{{value[0][0]== 1}} " />1
+        </td>
+        <td style="border:solid">
+            <input type = "radio" value="2"  name="12" ng-click = "sendVal(2,0,1)" ng-disabled ="{{value[0][1]!=0}}" ng-checked = "{{value[0][1]== 2}} "/>2
+            <input type = "radio" value="1"  name="12" ng-click = "sendVal(1,0,1)"ng-disabled ="{{value[0][1]!=0}}" ng-checked = "{{value[0][1]== 1}} "/>1
+        </td>
+        <td style="border:solid">
+            <input type = "radio" value="2"  name="13" ng-click = "sendVal(2,0,2)" ng-disabled ="{{value[0][2]!=0}}" ng-checked = "{{value[0][2]== 2}} "/>2
+            <input type = "radio" value="1"  name="13" ng-click = "sendVal(1,0,2)" ng-disabled ="{{value[0][2]!=0}}" ng-checked = "{{value[0][2]== 1}} "/>1
+        </td>
+    </tr>
+    <tr>
+        <td style="border:solid">
+            <input type = "radio" value="2"  name="21" ng-click = "sendVal(2,1,0)" ng-disabled ="{{value[1][0]!=0}}" ng-checked = "{{value[1][0]== 2}} "/>2
+            <input type = "radio" value="1"  name="21" ng-click = "sendVal(1,1,0)" ng-disabled ="{{value[1][0]!=0}}" ng-checked = "{{value[1][0]== 1}} "/>1
+        </td>
+        <td style="border:solid">
+            <input type = "radio" value="2"  name="22" ng-click = "sendVal(2,1,1)" ng-disabled ="{{value[1][1]!=0}}" ng-checked = "{{value[1][1]== 2}} "/>2
+            <input type = "radio" value="1"  name="22" ng-click = "sendVal(1,1,1)" ng-disabled ="{{value[1][1]!=0}}" ng-checked = "{{value[1][1]== 1}} "/>1
+        </td>
+        <td style="border:solid">
+            <input type = "radio" value="2"  name="23" ng-click = "sendVal(2,1,2)" ng-disabled ="{{value[1][2]!=0}}" ng-checked = "{{value[1][2]== 2}} "/>2
+            <input type = "radio" value="1"  name="23" ng-click = "sendVal(1,1,2)" ng-disabled ="{{value[1][2]!=0}}" ng-checked = "{{value[1][2]== 1}} "/>1
+        </td>
+    </tr>
+    <tr>
+        <td  style="border:solid">
+            <input type = "radio" value="2"  name="31" ng-click = "sendVal(2,2,0)" ng-disabled ="{{value[2][0]!=0}}" ng-checked = "{{value[2][0]== 2}} " />2
+            <input type = "radio" value="1"  name="31" ng-click = "sendVal(1,2,0)" ng-disabled ="{{value[2][0]!=0}}" ng-checked = "{{value[2][0]== 1}} "/>1
+        </td>
+        <td style="border:solid">
+            <input type = "radio" value="2"  name="32" ng-click = "sendVal(2,2,1)" ng-disabled ="{{value[2][1]!=0}}" ng-checked = "{{value[2][1]== 2}} "/>2
+            <input type = "radio" value="1"  name="32" ng-click = "sendVal(1,2,1)" ng-disabled ="{{value[2][1]!=0}}" ng-checked = "{{value[2][1]== 1}} "/>1
+        </td>
+        <td style="border:solid">
+            <input type = "radio" value="2"  name="33" ng-click = "sendVal(2,2,2)" ng-disabled ="{{value[2][2]!=0}}" ng-checked = "{{value[2][2]== 2}} "/>2
+            <input type = "radio" value="1"  name="33" ng-click = "sendVal(1,2,2)" ng-disabled ="{{value[2][2]!=0}}" ng-checked = "{{value[2][2]== 1}} "/>1
+        </td>
+    </tr>
+</table>
+
+<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.js'></script>
+<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular-route.js'></script>
+<script >
+
+    var app = angular.module('app', [])
+
+    app.controller('AppCtrl' ,function ($scope  , Appsvc) {
+        $scope.value = [
+            [0, 0 , 0],
+            [0, 0 , 0],
+            [0, 0 , 0]
+        ]
+        $scope.sendVal = function(a , i , j){
+            $scope.value[i][j] = a;
+            Appsvc.sendVal(a , i , j);
+            if($scope.value[(i+1)%3][j] == $scope.value[(i+2)%3][j] && $scope.value[(i+2)%3][j] == $scope.value[i][j] && $scope.value[i][j] !=0 )
+                    console.log($scope.value[i][j] +'wins');
+            if($scope.value[i][(j+1)%3] == $scope.value[i][(j+2)%3] && $scope.value[i][(j+2)%3] == $scope.value[i][j]  && $scope.value[i][j] !=0 )
+                console.log($scope.value[i][j] +'wins');
+            if($scope.value[(i+1)%3][(j+1)%3] == $scope.value[(i+2)%3][(j+2)%3] && $scope.value[(i+2)%3][(j+2)%3] == $scope.value[i][j]  && $scope.value[i][j] !=0 )
+                console.log($scope.value[i][j] +'wins');
+        }
+        $scope.$on('ws:new_val' ,function(_, data){
+            $scope.$apply(function(){
+                var val = $scope.value ;
+                val[data.i][data.j] = data.val;
+                $scope.value = val;
+                console.log('in new_val',$scope.value)
+
+            })
+        })
+    })
+    app.service('Appsvc' , function($http){
+        this.sendVal =function(a , i , j){
+            var data = {val:a , i:i , j :j};
+            $http.post('/saveval' , data );
+        }
+    } )
+    angular.module('app')
+            .service('WebSocketSvc', function ($rootScope, $window ) {
+                function websocketHost() {
+                    if ($window.location.protocol === "https:") {
+                        return "wss://" + window.location.host
+                    } else {
+                        return "ws://" + window.location.host
+                    }
+                }
+
+                var connection
+                this.connect = function () {
+                    connection = new WebSocket(websocketHost())
+                    connection.onmessage = function (e) {
+                        var payload = JSON.parse(e.data)
+                        $rootScope.$broadcast('ws:' + payload.topic, payload.data)
+                    }
+                }
+                this.send = function (topic, data) {
+                    var json = JSON.stringify({topic: topic, data: data})
+                    connection.send(json)
+                }
+            }).run(function (WebSocketSvc) {
+        WebSocketSvc.connect()
+    })
+</script>
+</body>
+</html>
